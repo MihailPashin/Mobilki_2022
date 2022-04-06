@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="@string/pref_openmode"
+        android:summary="Открывать файл при запуске приложения"
+        android:title="Открыть" />
+
+    <EditTextPreference
+        android:defaultValue="28"
+        android:dialogTitle="Введите размер шрифта (от 28 до 36)"
+        android:key="@string/pref_size"
+        android:summary="Устанавливает новый размер шрифта"
+        android:title="Размер шрифта"
+        android:inputType="number"/>
+    <ListPreference
+        android:key="@string/user_font"
+        android:summary="Выбор шрифта"
+        android:title="Шрифт"
+        android:defaultValue="1"
+        android:entries="@array/User_Font"
+        android:entryValues="@array/User_Font"/>
+    <ListPreference
+        android:key="@string/pref_style"
+        android:title="Цвет шрифта"
+        android:summary="Устанавливает цвет шрифта"
+        android:defaultValue="1"
+        android:entries="@array/text_style_color"
+        android:entryValues="@array/text_style_color"
+        android:dialogTitle="Выберите цвет шрифта" />
+
+    <CheckBoxPreference
+        android:key="@string/background"
+        android:summary="Использовать дизайнерский фон"
+        android:title="Мой фон" />
+</PreferenceScreen>

@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Blocknot_Paskhin_Kislov</string>
+    <string name="Saving">Сохранить</string>
+    <string name="Open">Открыть</string>
+    <string name="pref_openmode">Режим открытия</string>
+    <string name="pref_color">Цвет</string>
+    <string name="pref_color_black">Черный цвет</string>
+    <string name="pref_color_red">Красный цвет</string>
+    <string name="pref_color_green">Зеленый цвет</string>
+    <string name="pref_color_blue">Синий цвет</string>
+    <string name="pref_size">Размер</string>
+    <string name="pref_style">Стиль</string>
+    <string name="pref_style_regular">Нормальный</string>
+    <string name="pref_style_bold">Полужирный</string>
+    <string name="pref_style_italic">Курсив</string>
+    <string name="background">Особый фон</string>
+    <string name="user_font">Собственный шрифт</string>
+    <string name="settings_act">Настройки</string>
+    <string name="clear_act">Очистить</string>
+    <string name="close_act">Закрыть</string>
+</resources>
