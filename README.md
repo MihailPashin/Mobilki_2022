@@ -1,8 +1,10 @@
 # Mobilki_2022
 Лабы по мобильным приложениям
 
-4 ЛР Блокнот
 
+***Сдал****
+
+4 ЛР Блокнот
 
 Образец: http://developer.alexanderklimov.ru/android/texteditor.php,
 
