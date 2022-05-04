@@ -23,36 +23,23 @@ public class TimeSpan {
             this.second = second;
             this.minutes = minutes;
         }
-
     }
     public boolean Until_ending(){
-
         return this.Ending;
     }
 
-
     public void FromSeconds()
     {
-        //this.second = ts.second-1;
-
-        //if (this.second <1 & this.minutes>0) {
-        //    this.second=59;
-        //    this.minutes-=1;
-        //}
-
-
         if(this.second<1 & this.minutes>0)
         {
             this.second=59;
             this.minutes-=1;
-
         }
         else this.second-=1;
         if(this.second==0 & this.minutes==0)
         {
          this.Ending=false;
         }
-
     }
 
     public String ToString() {

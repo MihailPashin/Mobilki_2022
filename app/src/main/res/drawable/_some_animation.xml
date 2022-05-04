@@ -30,15 +30,16 @@
         android:duration="250" />
     <item android:drawable="@drawable/thrtn_frm"
         android:duration="250" />
-    <item android:drawable="@drawable/four_frm"
+    <item android:drawable="@drawable/frtn_frm"
         android:duration="250" />
     <item android:drawable="@drawable/fivtn_frm"
         android:duration="250" />
-    <item android:drawable="@drawable/sevntn_frm"
+    <item android:drawable="@drawable/sxtn_frm"
         android:duration="250" />
     <item android:drawable="@drawable/eigtn_frm"
         android:duration="250" />
-
+    <item android:drawable="@drawable/sevntn_frm"
+        android:duration="250" />
 
 
 

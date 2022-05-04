@@ -7,6 +7,8 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
+import android.provider.Telephony;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -33,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean Timer_Zapuzhen;
     ToggleButton tg_btn;
     private MediaPlayer Super_Mario;
-
+    private static final String TAG ="esa";
+    private static final String TAG_2="animation";
+    private static final String START_TAG="Начальное_Время";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
          tg_btn= (ToggleButton) findViewById(R.id.user_switch);
          ImageView img= findViewById(R.id.animationView);
          img.setBackgroundResource(R.drawable._some_animation);
-        //AnimationDrawable frm_anim= (AnimationDrawable) img.getBackground();
+        AnimationDrawable frm_anim= (AnimationDrawable) img.getBackground();
         tg_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -51,16 +55,38 @@ public class MainActivity extends AppCompatActivity {
                     {
                         //frm_anim.start();
                         Timer_Zapuzhen=true;
-                        //Timer_Starting();
-                        New_Timer_Starting();
+                        Timer_Starting();
+                        runOnUiThread(new Runnable() {
+                              @Override
+                            public void run() {
+                                frm_anim.start();
+                                Log.e(TAG_2, "старт");
+                            }
+                           });
+                        //New_Timer_Starting();
                         }
                 } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            frm_anim.stop();
+                            Log.e(TAG_2, "остановка");
+                        }
+                    });
                     if(Timer_Zapuzhen)
                     {
                         pauseTimer();
-                        //btn_status=false;
-                       // frm_anim.stop();
+
                         Timer_Zapuzhen = false;
+                    }
+                    else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                frm_anim.selectDrawable(0);
+                                Log.e(TAG_2, "остановка");
+                            }
+                        });
                     }
                 }
             }
@@ -73,10 +99,13 @@ public class MainActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case 1:
-                    Toast toast = Toast.makeText(MainActivity.this, "IT'S FINE", Toast.LENGTH_LONG);
-                    toast.show();
+                    Toast toast_finished = Toast.makeText(MainActivity.this, "IT'S FINE", Toast.LENGTH_LONG);
+                    toast_finished.show();
                     break;
-
+                case 2:
+                    Toast toast_reset = Toast.makeText(MainActivity.this, "Сброс", Toast.LENGTH_LONG);
+                    toast_reset.show();
+                    break;
             }
         }
     };
@@ -88,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
             Super_Mario = MediaPlayer.create(this, R.raw.super_mario);
 
             TimeSpan ts = new TimeSpan(new_minutes_second[1], new_minutes_second[0]);
+
             Countdown(ts);
         } catch (Exception e) {
 
@@ -101,33 +131,45 @@ public class MainActivity extends AppCompatActivity {
         //g = true; // для отображения на label обратного отсчёта
         //button1.BackColor = DefaultBackColor;// скрытие кнопки сброс отсчёта
        // boolean until_ending=true;
+        ImageView img= findViewById(R.id.animationView);
+        AnimationDrawable frm_anim= (AnimationDrawable) img.getBackground();
 
 
         Runnable r = ()->{
 
             try{
-                synchronized(this)
-                {
-                   // TimeSpan ts = new TimeSpan(minutes, seconds); // создаём экземпляр класса TimeSpan. Важное его преимущество над Timer-Принятие интовых переменных
-
+                synchronized(this) {
+                    // TimeSpan ts = new TimeSpan(minutes, seconds); // создаём экземпляр класса TimeSpan. Важное его преимущество над Timer-Принятие интовых переменных
 
                     while (ts.Until_ending()) // До тех пора не истёк отсчёт. reset =true если сбросили таймер
                     {
-                        
+                        //runOnUiThread(new Runnable() {
+                        //  @Override
+                        // public void run() {
+                        //    frm_anim.start();
+                        //}
+                        //});
                         Thread.sleep(1000); // ожидание секунды
                         ts.FromSeconds();
 
-                        runOnUiThread(new Runnable() {
+                        CountDown_Text.post(new Runnable() {
                             @Override
                             public void run() {
                                 Set_text(ts);
                             }
                         });
+                        mHandler.sendEmptyMessage(1);
 
                     }
 
-                    mHandler.sendEmptyMessage(1);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            frm_anim.stop();
+                        }
+                    });
 
+                    mHandler.sendEmptyMessage(1);
 
                 }
                
@@ -140,12 +182,19 @@ public class MainActivity extends AppCompatActivity {
             }
 
         };
-       CountDown_Text.setText(ts.ToString());
-        Thread myThread = new Thread(r,"MyThread");
-        myThread.start();
+
+            CountDown_Text.setText(ts.ToString());
+            Thread myThread = new Thread(r,"MyThread");
+
+            myThread.start();
+            Pause_Appearing = true;
+            Timer_Zapuzhen = true;
+
+
 
 
     }
+
     private void Set_text(TimeSpan ts)
     { TextView text_second= findViewById(R.id.countdown_text);
         text_second.setText(ts.ToString());
@@ -155,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         int Mil;
         TextView text_second= findViewById(R.id.textView4);
         Super_Mario = MediaPlayer.create(this, R.raw.super_mario);
-
+        Log.e(START_TAG, String.format(String.format("%d:%d", minutes_second[0], minutes_second[1])));
         if (!Pause_Appearing) {
             Mil = ((minutes_second[0] * 60) + minutes_second[1]) * 1000;
         } else {
@@ -163,24 +212,33 @@ public class MainActivity extends AppCompatActivity {
             Pause_Appearing = false;
         }
 
-
-        mCountDownTimer = new CountDownTimer(Mil, 1000) {
+        mCountDownTimer = new CountDownTimer(Mil, 500) {
             @Override
             public void onTick(long millisUntilFinished) {
                 int Mill = (int) millisUntilFinished;
-              //  myHandler.sendMessage(myHandler.obtainMessage());
 
                 value_for_pause = Mill;
-                int M2 = (Mill / 1000) / 60;
-                int S2 = (Mill / 1000) % 60;
-                updateCountDownText(M2, S2);
+                Log.e(String.format("%d",Mill), "итерация");
+                int M2 = (Mill/1000) / 60  ;
+                int S2 = ((Mill/1000) % 60);
+                updateCountDownText(M2,S2 );
+
 
             }
 
             @Override
             public void onFinish() {
+                Log.e(TAG, "конец");
+                mHandler.sendEmptyMessage(1);
                 Pause_Appearing = false;
                 Timer_Zapuzhen = false;
+                SoundPlay(Super_Mario);
+                tg_btn.post(new Runnable() {
+                    @Override
+                    public void run() {
+                      tg_btn.setChecked(false);
+                    }
+                });
             }
         }.start();
         Pause_Appearing = true;
@@ -192,8 +250,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetTimer() {
+
         pauseTimer();
-        updateCountDownText(0, 0);
+
+        mHandler.sendEmptyMessage(2);
         int[] values_of_time=Checking_Minutes_Second();
     }
 
@@ -225,14 +285,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateCountDownText(int M, int S) {
 
-        String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", M, S);
-        CountDown_Text.setText(timeLeftFormatted);
+        CountDown_Text.post(new Runnable() {
+            @Override
+            public void run() {
+                CountDown_Text.setText(String.format("%d:%d", M, S));
+            }
+        });
     }
     private void pauseTimer() {
 
         mCountDownTimer.cancel();
-        Toast toast = Toast.makeText(this, "It's over!", Toast.LENGTH_LONG);
-        toast.show();
+
     }
 
     public void For_reset(View view) {
