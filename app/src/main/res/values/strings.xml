@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Update_Lab6_Paskhin_Kislov</string>
+    <string-array name="prior_list">
+        <item>Высокий</item>
+        <item>Средний</item>
+        <item>Низкий</item>
+    </string-array>
+</resources>
