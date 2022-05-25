@@ -107,6 +107,13 @@ public class _SecondActivity extends AppCompatActivity {
                     "Сначала введите дату!", Toast.LENGTH_LONG).show();
             return;
         }
+        if(description.equals("")) {
+            date = "";
+            Toast.makeText(_SecondActivity.this,
+                    "Не забудьте про описание", Toast.LENGTH_LONG).show();
+            return;
+        }
+
 
         if(time.equals("--:--"))
             time = "";
